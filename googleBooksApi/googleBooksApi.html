@@ -1,0 +1,32 @@
+<template>
+    <lightning-card title="Google Books Search">
+        <div class="slds-p-horizontal_medium">
+            <lightning-input
+                label="Search Books"
+                value={searchTerm}
+                onchange={handleInputChange}
+                placeholder="Enter a book title or keyword"
+            ></lightning-input>
+            <lightning-button
+                label="Search"
+                onclick={searchBooks}
+                class="slds-m-top_small"
+            ></lightning-button>
+
+            <template if:true={books}>
+                <ul class="slds-m-top_medium">
+                    <template for:each={books} for:item="book">
+                        <li key={book.id} class="slds-m-bottom_small">
+                            <strong>{book.title}</strong><br/>
+                            <em>{book.authors}</em>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+
+            <template if:true={error}>
+                <p class="slds-text-color_error">{error}</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>
