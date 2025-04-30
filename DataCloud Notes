@@ -37,3 +37,13 @@ and behaviors.
 
 Data Analysis:
 -> derive actionable insights, enabling personalized customer epxeriences and informae
+
+
+
+SFDC Data Model
+---------------
+
+Data preparation->Provisioning, Data Ingestion, Data Mapping(Harmonization), and Identity Resolution(Unification).
+
+Data Consumption->Insights & Analytics, Segments, Activation
+--------------------------------------------------------------------------------------------------------------------
