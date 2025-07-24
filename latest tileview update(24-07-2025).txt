@@ -1,0 +1,539 @@
+<template>
+  <!-- <div>
+    <template for:each={buildings} for:item="building">
+      <div key={building.id} class="tile" data-label={building.label} data-id={building.id}>
+        <div class="tile-content">
+          <div class="image-container">
+            <img src={Image} alt="Event Image" class="tile-image" />
+            <img src={building.image} alt="Event Image" class="tile-image" />
+            <div>
+              <h2 class="heading">Building: {building.buildingName}</h2>
+              <h4 class="sub-heading">{building.address}</h4>
+              <div class="property-list">
+                <template for:each={building.properties} for:item="property">
+                  <div key={property.propertyId} class="properties">
+                    <span class="slds-text-title_bold">Bedroom {property.numberOfRooms} </span><br>
+                    <span class="slds-text-title_bold">Units {property.noOfUnitsVacant}/{property.noOfUnits}</span><br>
+                    
+                    <span class="Waitlist-link"><a href="javascript:void(0);" onclick={handlePropertyClick}>View Details </a></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        <g fill="none">
+                                            <path
+                                                d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z" />
+                                            <path fill="currentColor"
+                                                d="m7.728 9.245l.544 1.924a4.5 4.5 0 1 0 5.136 6.563l.102-.187l1.78.91a6.5 6.5 0 1 1-7.802-9.138zM11 2a3 3 0 0 1 1.5 5.599v1.32l1.743.581H16a1.5 1.5 0 0 1 0 3h-2q-.243 0-.474-.077l-1.026-.342V13a.5.5 0 0 0 .5.5h2a3.5 3.5 0 0 1 2.8 1.4l1.95 2.6H20a1.5 1.5 0 0 1 0 3h-1a1.5 1.5 0 0 1-1.2-.6l-2.4-3.2a.5.5 0 0 0-.4-.2h-2A3.5 3.5 0 0 1 9.5 13V7.599A3 3 0 0 1 11 2" />
+                                        </g>
+                    </svg>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div> -->
+  <div>
+        <div>
+          <template for:each={buildings} for:item="building">
+            <div key={building.id} data-label={building.label} data-id={building.id}>
+              <ul class="ontario-card__container ontario-card--cards-per-row-2">
+                <li class="ontario-card ontario-card--image--one-third ontario-card--position-horizontal ontario-card--position-horizontal__image-left">
+                  <div class="ontario-card__image-container">
+                    <!-- <img src={Image} alt="Event Image" class="tile-image" /> -->
+                    <img src={building.image} alt="Building Image" class="tile-image" />
+                    <!-- <img class="ontario-card__image" src={tile.eventImageURL} alt="card component image" /> -->
+                  </div>
+                  <div class="ontario-card__text-container ontario-card--image-true">
+                    <h3 class="ontario-card__heading">
+                      <a href="javascript:void(0);" data-id={building.id} onclick={handleTileClick}>
+                        <!-- {building.buildingName}<br> -->
+                        {building.building_Name}<br>
+                        {building.address}
+                      </a>
+                    </h3>
+                    <div class="ontario-card__description">
+                      <div class="property-list">
+                        <template for:each={building.properties} for:item="property">
+                          <div key={property.propertyId} class="properties">
+                            <span class="slds-text-title_bold">Bedroom {property.numberOfRooms}</span><br />
+                            <span class="slds-text-title_bold">Units {property.noOfUnitsVacant}/{property.noOfUnits}</span><br />
+                            <span class="Waitlist-link">
+                              <!-- <a href="javascript:void(0);" data-id={property.propertyId} onclick={handleClick}>View Details</a> -->
+                              <a href="javascript:void(0);" data-building-id={building.buildingId} data-property-id={property.propertyId} onclick={handleClick}>View Details</a>
+                            </span>
+                            <template if:true={property.barrierFree}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                          <g fill="none">
+                                              <path
+                                                  d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z" />
+                                              <path fill="currentColor"
+                                                  d="m7.728 9.245l.544 1.924a4.5 4.5 0 1 0 5.136 6.563l.102-.187l1.78.91a6.5 6.5 0 1 1-7.802-9.138zM11 2a3 3 0 0 1 1.5 5.599v1.32l1.743.581H16a1.5 1.5 0 0 1 0 3h-2q-.243 0-.474-.077l-1.026-.342V13a.5.5 0 0 0 .5.5h2a3.5 3.5 0 0 1 2.8 1.4l1.95 2.6H20a1.5 1.5 0 0 1 0 3h-1a1.5 1.5 0 0 1-1.2-.6l-2.4-3.2a.5.5 0 0 0-.4-.2h-2A3.5 3.5 0 0 1 9.5 13V7.599A3 3 0 0 1 11 2" />
+                                          </g>
+                                </svg>
+                            </template>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </template>
+        </div>
+  </div>
+</template>
+
+===============
+import { LightningElement, track, wire, api } from 'lwc';
+import getTilesData from '@salesforce/apex/SH_TILECONFIG_ServicesController.getTilesData';
+import getEventTilesprop from '@salesforce/apex/SH_TILECONFIG_ServicesController.getPropertyTilesForActiveBuildings';
+import TILES from '@salesforce/resourceUrl/SH_TileImages';
+import { NavigationMixin } from 'lightning/navigation';
+
+export default class SH_BuildingListView extends NavigationMixin(LightningElement) {
+  
+  @track buildings = [];
+  @track tileprops = [];
+
+//   Tiles = '/SH_TileImages/affordable.jpeg'
+    Image = TILES + '/affordable.jpeg';
+    URL;
+    connectedCallback() {
+        this.URL = window.location.origin;
+        console.log('Base URL: ' + this.URL);
+    }
+
+    @wire(getTilesData)
+    wiredTiles({ error, data }) {
+        if (data) {
+            console.log('Fetched Data: --->', data);
+            this.buildings = data;
+            this.buildingimage = this.buildings[0].imageUrl;
+            console.log('builidings image===='+this.buildingimage);
+            this.TilesLink = TILES+'/'+this.buildingimage;
+            console.log("image==", this.TilesLink);
+            
+            // this.buildings = data.map(tile => ({
+                // ...tile,
+                // imageUrl: tile.SH_Image_Url__c ? `${TILES}/${tile.SH_Image_Url__c}` : '',
+                //imageUrl: tile.imageUrl ? `${TILES}/${tile.imageUrl}` : `${TILES}/affordable.jpeg`,
+                // communitypropUrl: `/details-page/?recordId=${tile.Id}`
+            // }));
+            this.buildings = data.map(tile => ({
+                ...tile,
+                image: tile.imageUrl ? `${TILES}/${tile.imageUrl}` : ''
+            }));
+            
+            console.log('Fetched buildings: ', this.buildings);
+        } else if (error) {
+            console.error('Error fetching event buildings:', error);
+        }
+        console.log('Processed Tiles buildings: ', JSON.stringify(this.buildings));
+    }
+
+    @wire(getEventTilesprop)
+    wiredEventTilesprop({ error, data }) {
+        if (data) {
+            console.log('Fetched Data property: ', data);
+            this.tileprops = data.map(tileprop => ({
+                id: tileprop.Id,
+                name: tileprop.Name,
+                noofunits: tileprop.SH_No_of_units__c,
+                noofunitsvacant: tileprop.SH_No_of_Units_Vacant__c,
+                noofroom: tileprop.SH_Number_of_Room__c,
+                communitypropUrl: '/details-page/?recordId='+tileprop.Id
+            }));
+            console.log('Processed Tileprops: ', JSON.stringify(this.tilesprops));
+        } else if (error) {
+            console.error('Error fetching event buildings:', error);
+        }
+    }
+
+    handleTileClick(event) {
+        const tileId = event.currentTarget.dataset.id; 
+        const selectedTile = this.buildings.find(tile => tile.id === tileId);
+        console.log('tileId===='+selectedTile);
+        if (!selectedTile) {
+            console.error('Tile not found.');
+            return;
+        }
+
+        const { label: eventtype, communityURL } = selectedTile;
+
+        if (!communityURL) {
+            console.error('Community URL is missing for this tile.');
+            return;
+        }
+
+        this[NavigationMixin.Navigate]({
+            type: 'standard__webPage',
+            attributes: {
+                url: `${communityURL}?eventType=${eventtype}`
+            }
+        });
+
+        this.dispatchEvent(new CustomEvent('tileclick', {
+            detail: { eventtype }
+        }));
+    }
+
+
+    handleClick(event) {
+        console.log('This is the data set ::: ' + JSON.stringify(event.target.dataset));
+        const propertyId = event.currentTarget.dataset.propertyId; 
+        const buildingId = event.currentTarget.dataset.buildingId; 
+
+        // Navigate to community page with URL params
+        this[NavigationMixin.Navigate]({
+            type: 'standard__webPage',
+            attributes: {
+                url: `/sh-property/${propertyId}?buildingid=${buildingId}`
+            }
+        });
+    }
+}
+
+===================
+
+.tile-container {
+    /* display: flex; */
+    /* flex-wrap: wrap; */
+    /* flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+    padding: 20px; */
+}
+
+.image-container{
+
+}
+
+.tile {
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    /* width: 280px; */
+    width: 100%;
+    /* width:4000px; */
+    overflow: hidden;
+    text-align: center;
+}
+
+.tile:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.tile-image {
+    width: 16%;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 16px;
+}
+
+.image-container{
+    display: flex; 
+    align-items: center; 
+    flex: 0 0 25%;
+}
+
+.tile-content {
+    padding: 20px;
+    text-align: left;
+}
+
+.heading {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin-bottom: 10px;
+    line-height: 30px;
+    font-family: "raleway-modified-700", "open-sans-700", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.sub-heading {
+    font-size: 16px;
+    color: #444444;
+    
+}
+
+.Waitlist-link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* @media screen and (max-width: 768px) {
+    .tile {
+        width: 100%;
+    }
+} */
+
+.property-list {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    
+}
+
+.properties {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 4px;
+    max-width: 400px;
+    flex: 1;
+}
+
+@media screen and (max-width: 768px) {
+  .tile-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+====================
+<?xml version="1.0"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+	<apiVersion>58.0</apiVersion>
+	<isExposed>true</isExposed>
+	<targets>
+		<target>lightning__AppPage</target>
+		<target>lightning__HomePage</target>
+		<target>lightning__RecordPage</target>
+		<target>lightningCommunity__Default</target>
+		<target>lightningCommunity__Page</target>
+	</targets>
+</LightningComponentBundle>
+
+===========================================================
+
+public class SH_TILECONFIG_ServicesController {
+    @AuraEnabled(cacheable = true)
+    public static List < SH_Building__c > getEventTiles() {
+        try {
+            List < SH_Building__c > eventList = new List < SH_Building__c > ();
+            eventList = [SELECT Id, SH_Tile_Name__c, SH_Service_Status__c, SH_Address__c, SH_Image_Url__c, SH_Community_Page_Url__c, SH_Building_Name__c,SH_Tile_Subheading__c, SH_Order__c FROM SH_Building__c
+                WHERE SH_Service_Status__c = 'Active'
+                order by SH_Order__c asc
+            ];
+            return eventList;
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage() + '===>' + e.getLineNumber());
+        }
+    }
+
+    //Get related properties of building
+    @AuraEnabled(cacheable = true)
+    public static List < SH_Property__c > getPropertyTilesForActiveBuildings() {
+        try {
+            // First, fetch active buildings
+            List < SH_Building__c > activeBuildings = [
+                SELECT Id
+                FROM SH_Building__c
+                WHERE SH_Service_Status__c = 'Active'
+            ];
+
+            Set < Id > buildingIds = new Set < Id > ();
+            for (SH_Building__c b: activeBuildings) {
+                buildingIds.add(b.Id);
+            }
+
+            List < SH_Property__c > propertyList = [
+                SELECT Id, Name, SH_Building__r.Id, SH_Building__r.Name, SH_No_of_units__c, SH_No_of_Units_Vacant__c, SH_Number_of_Room__c
+                FROM SH_Property__c
+                WHERE SH_Building__c IN: buildingIds LIMIT 2
+            ];
+
+            return propertyList;
+
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage() + ' ===> Line: ' + e.getLineNumber());
+        }
+    }
+
+    @AuraEnabled(cacheable = true)
+    public static List < BuildingWrapper > getTilesData() {
+        try {
+            List < SH_Property__c > propertyList = [
+                SELECT
+                Id,
+                Name,
+                SH_Building__r.Id,
+                SH_Building__r.Name,
+                SH_Building__r.SH_Tile_Name__c,
+                SH_Building__r.SH_Service_Status__c,
+                SH_Building__r.SH_Address__c,
+                SH_Building__r.SH_Image_Url__c,
+                SH_Building__r.SH_Community_Page_Url__c,
+                SH_Building__r.SH_Tile_Subheading__c,
+                SH_Building__r.SH_Order__c,
+                SH_Building__r.SH_Building_Name__c,
+                SH_No_of_units__c,
+                SH_No_of_Units_Vacant__c,
+                SH_Number_of_Room__c,
+                SH_Barrier_Free__c
+                FROM SH_Property__c
+                WHERE SH_Building__r.SH_Service_Status__c = 'Active'
+                ORDER BY SH_Building__r.SH_Order__c ASC
+            ];
+
+            Map < Id, BuildingWrapper > buildingMap = new Map < Id, BuildingWrapper > ();
+
+            for (SH_Property__c prop: propertyList) {
+                Id bId = prop.SH_Building__r.Id;
+
+                if (!buildingMap.containsKey(bId)) {
+                    BuildingWrapper bw = new BuildingWrapper();
+                    bw.buildingId = bId;
+                    bw.buildingName = prop.SH_Building__r.Name;
+                    bw.tileName = prop.SH_Building__r.SH_Tile_Name__c;
+                    bw.serviceStatus = prop.SH_Building__r.SH_Service_Status__c;
+                    bw.address = prop.SH_Building__r.SH_Address__c;
+                    bw.imageUrl = prop.SH_Building__r.SH_Image_Url__c;
+                    bw.building_Name = prop.SH_Building__r.SH_Building_Name__c;
+                    bw.communityPageUrl = prop.SH_Building__r.SH_Community_Page_Url__c;
+                    bw.tileSubheading = prop.SH_Building__r.SH_Tile_Subheading__c;
+                    bw.order = String.valueOf(prop.SH_Building__r.SH_Order__c != null ? prop.SH_Building__r.SH_Order__c.intValue() : 0);
+                    buildingMap.put(bId, bw);
+                }
+                BuildingWrapper bWrapper = buildingMap.get(bId);
+                //LIMITTER
+                if (bWrapper.properties.size() < 8) {
+                    buildingMap.get(bId).properties.add(new PropertyWrapper(prop));
+                }
+            }
+
+            return new List < BuildingWrapper > (buildingMap.values());
+
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage() + ' ===> Line: ' + e.getLineNumber());
+        }
+    }
+
+    public class BuildingWrapper {
+        @AuraEnabled public Id buildingId;
+        @AuraEnabled public String buildingName;
+        @AuraEnabled public String building_Name;
+        @AuraEnabled public String tileName;
+        @AuraEnabled public String serviceStatus;
+        @AuraEnabled public String address;
+        @AuraEnabled public String imageUrl;
+        @AuraEnabled public String communityPageUrl;
+        @AuraEnabled public String tileSubheading;
+        @AuraEnabled public String order;
+        @AuraEnabled public List < PropertyWrapper > properties = new List < PropertyWrapper > ();
+    }
+    public class PropertyWrapper {
+        @AuraEnabled public Id propertyId;
+        @AuraEnabled public String propertyName;
+        @AuraEnabled public String noOfUnits;
+        @AuraEnabled public String noOfUnitsVacant;
+        @AuraEnabled public String numberOfRooms;
+        @AuraEnabled public Boolean barrierFree;
+
+        public PropertyWrapper(SH_Property__c prop) {
+            this.propertyId = prop.Id;
+            this.propertyName = prop.Name;
+            this.barrierFree = prop.SH_Barrier_Free__c;
+            this.noOfUnits = String.valueOf(prop.SH_No_of_units__c);
+            this.noOfUnitsVacant = String.valueOf(prop.SH_No_of_Units_Vacant__c);
+            this.numberOfRooms = String.valueOf(prop.SH_Number_of_Room__c);
+        }
+    }
+}
+
+====================
+
+@isTest
+public class SH_TILECONFIG_ServicesControllerTest {
+    
+    private static SH_Building__c createTestBuilding(String name, Integer order) {
+    SH_Building__c b = new SH_Building__c(
+        SH_Building_Name__c = 'Building1',
+        SH_Tile_Name__c = 'Tile ' + name,
+        SH_Service_Status__c = 'Active',
+        SH_Address__c = '123 ' + name + ' Street',
+        SH_Image_Url__c = 'testImage.jpg',
+        SH_Community_Page_Url__c = 'https://example.com/' + name,
+        SH_Tile_Subheading__c = 'Subheading for ' + name,
+        SH_Order__c = order,
+        SH_Property_type__c = 'Townhouse',         
+        SH_Housing_Provider__c = '001Aq00000kaRyTIAU', 
+        SH_Type__c = 'Affordable'               
+    );
+    insert b;
+    return b;
+}
+    // Helper method to create properties linked to a building
+   private static List<SH_Property__c> createTestProperties(Id buildingId, Integer count) {
+    List<SH_Property__c> props = new List<SH_Property__c>();
+    for (Integer i = 0; i < count; i++) {
+        Boolean isBarrierFree = Math.mod(i, 2) == 0;
+
+        SH_Property__c prop = new SH_Property__c(
+            SH_Building__c = buildingId,
+            SH_Barrier_Free__c = isBarrierFree,
+            //SH_No_of_units__c = 1,
+            //SH_No_of_Units_Vacant__c = 2,
+            SH_Number_of_Room__c = '3'
+          
+        );
+
+        props.add(prop);
+    }
+    insert props;
+    return props;
+}
+
+
+    @isTest
+    static void testGetEventTiles() {
+        SH_Building__c b1 = createTestBuilding('Building1', 1);
+        SH_Building__c b2 = createTestBuilding('Building2', 2);
+
+        Test.startTest();
+        List<SH_Building__c> result = SH_TILECONFIG_ServicesController.getEventTiles();
+        Test.stopTest();
+
+        System.assertNotEquals(null, result);
+        System.assertEquals(2, result.size());
+        System.assertEquals('Building1', result[0].SH_Building_Name__c);
+    }
+
+    @isTest
+    static void testGetPropertyTilesForActiveBuildings() {
+        SH_Building__c b1 = createTestBuilding('B1', 1);
+        createTestProperties(b1.Id, 5); // Only 2 will be returned due to LIMIT in method
+
+        Test.startTest();
+        List<SH_Property__c> props = SH_TILECONFIG_ServicesController.getPropertyTilesForActiveBuildings();
+        Test.stopTest();
+
+        System.assertNotEquals(null, props);
+        System.assertEquals(2, props.size(), 'Expected only 2 properties due to SOQL LIMIT');
+    }
+
+    @isTest
+    static void testGetTilesData() {
+        SH_Building__c b1 = createTestBuilding('Alpha', 1);
+        SH_Building__c b2 = createTestBuilding('Beta', 2);
+        createTestProperties(b1.Id, 6); // Less than 8
+        createTestProperties(b2.Id, 10); // More than 8, should be capped
+
+        Test.startTest();
+        List<SH_TILECONFIG_ServicesController.BuildingWrapper> wrappers = SH_TILECONFIG_ServicesController.getTilesData();
+        Test.stopTest();
+
+        System.assertNotEquals(null, wrappers);
+        System.assertEquals(2, wrappers.size());
+
+        for (SH_TILECONFIG_ServicesController.BuildingWrapper bw : wrappers) {
+            System.assert(bw.buildingId != null);
+            System.assert(bw.buildingName != null);
+            System.assert(bw.properties.size() <= 8, 'Max 8 properties per building');
+        }
+    }
+}
