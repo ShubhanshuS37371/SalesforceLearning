@@ -1,5 +1,8 @@
 # SalesforceLearning
 
+LWC
+#for google books api you need to create trusted url with apiname googlebooksapi and url:	https://www.googleapis.com
+=======
 
 lwc receipes
 https://github.com/trailheadapps/lwc-recipes/tree/main
@@ -21,3 +24,4 @@ You will learn the JavaScript concepts that are required to play with the lightn
 9.Query selector
 10.Fetch API
 11.Array helper function(each, map, filter, find, every, some)
+

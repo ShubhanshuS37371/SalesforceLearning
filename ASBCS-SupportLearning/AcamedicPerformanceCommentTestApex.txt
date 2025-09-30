@@ -1,0 +1,35 @@
+@isTest
+public class AcademicPerformanceCommentTest {
+    // Test method to cover positive scenario where the comment is successfully updated
+    @isTest
+    static void testUpdateComment() {
+        // Create test data
+        Account acc = TestDataFactory.createAccount();
+    	School__c testSchool = new School__c(Name = 'Test School');
+    	testSchool.Account__c = acc.Id;
+    	insert testSchool;
+    
+        Academic_Performance__c academicPerformance = new Academic_Performance__c(
+            School__c = testSchool.Id,
+        	Fiscal_year__c = '2024',
+        	Grading_Type__c = 'Traditional',
+        	School_Type__c = 'High School',
+        	Grades_Served__c = 'High School',
+        	Letter_Grade__c = 'A',
+        	Improvement_Designation__c = 'Comprehensive'
+        );
+        
+        // Insert the record
+        insert academicPerformance;
+
+        // Call the method being tested
+        AcademicPerformanceComment.updateAcademicPerformanceCRComment(academicPerformance.Id,'2024','Test Comment');
+
+        // Retrieve the updated record
+        Academic_Performance__c updatedRecord = [SELECT Id, Comment_Made_By_Charter_Rep__c FROM Academic_Performance__c WHERE Id = :academicPerformance.Id];
+
+        // Assert that the comment field was updated successfully
+        System.assertEquals('Test Comment', updatedRecord.Comment_Made_By_Charter_Rep__c, 'Comment should be updated');
+    }
+
+}

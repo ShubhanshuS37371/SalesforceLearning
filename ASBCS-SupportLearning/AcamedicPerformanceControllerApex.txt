@@ -1,0 +1,170 @@
+public with sharing class AcademicPerformanceController {
+  public AcademicPerformanceController() {
+  }
+
+  // Function to find all details for current School Id ( lwc -->academicDashboard)
+  @AuraEnabled(cacheable=true)
+  public static List<Academic_Performance__c> findAcademicPerformanceDetailsForSchool(
+    String schoolId
+  ) {
+    List<Academic_Performance__c> academicPerformances = [
+      SELECT
+        Id,
+        Fiscal_year__c,
+        Grading_Type__c,
+        School_Type__c,
+        Grades_Served__c,
+        Letter_Grade__c,
+        Improvement_Designation__c,
+        State_Designations_Rating__c,
+        Overall_Rating__c,
+        Letter_Grade_Rating__c,
+        Comment_Made_By_Charter_Rep__c
+      FROM Academic_Performance__c
+      WHERE School__c = :schoolId
+      ORDER BY Fiscal_year__c DESC
+      LIMIT 3
+    ];
+    return academicPerformances;
+  }
+
+  //Function to save comments made by charter reps.
+  @AuraEnabled
+    public static void updateAcademicPerformanceComment(String academicPerfId, String year, String comment) {
+      AcademicPerformanceComment.updateAcademicPerformanceCRComment(academicPerfId, year, comment);
+    }
+  @AuraEnabled(cacheable = true)
+  public static String getUserProfileName() {
+    Id currentUserProfileId = UserInfo.getProfileId();
+    Profile userProfile = [SELECT Name FROM Profile WHERE Id = :currentUserProfileId];
+  return userProfile.Name;
+  }
+
+  @AuraEnabled(cacheable = true)
+  public static String getAcademicDBLanguage(){
+    List<Academic_Dashboard_Language__mdt> academicLanguage = [Select Language__c from Academic_Dashboard_Language__mdt WHERE DeveloperName = 'Language' LIMIT 1];
+    return academicLanguage[0].Language__c !=null ? academicLanguage[0].Language__c : '';
+  }
+
+  @AuraEnabled(cacheable = true)
+  public static void saveAcademicDBLanguage(String updatedLanguage){
+    boolean isMetadataUpdateNeeded = false;
+    List<Academic_Dashboard_Language__mdt> academicLanguage = [Select Language__c, DeveloperName, MasterLabel from Academic_Dashboard_Language__mdt WHERE DeveloperName = 'Language' LIMIT 1];
+    //metadata instance
+    Metadata.CustomMetadata metaDataRec = new Metadata.CustomMetadata();
+    metadataRec.fullName = 'Academic_Dashboard_Language__mdt.'+academicLanguage[0].DeveloperName;
+    metadataRec.label = academicLanguage[0].MasterLabel;
+    //value of field
+    Metadata.CustomMetadataValue languagetoUpdate = new Metadata.CustomMetadataValue();
+    languagetoUpdate.field = 'Language__c';
+    languagetoUpdate.value = updatedLanguage;
+    metadataRec.values.add(languagetoUpdate);
+    //metadata instance
+    Metadata.DeployContainer mdContainer = new MetaData.DeployContainer();
+    mdContainer.addMetadata(metadataRec);
+    isMetadataUpdateNeeded = true;
+    if(isMetadataUpdateNeeded){
+      Metadata.Operations.enqueueDeployment(mdContainer, null);
+    }
+  }
+
+  // Function to find all academic performance details for current org Id (lwc -->academicDashboardForOrganization)
+  @AuraEnabled(cacheable=true)
+  public static List<Academic_Performance__c> findAcademicPerformanceDetailsForOrganization(
+    String organizationId
+  ) {
+    System.debug('findAcademicPerformanceDetailsForOrganization');
+    List<Academic_Performance__c> academicPerformances = [
+      SELECT
+        School__r.Name,
+        Grading_Type__c,
+        Grades_Served__c,
+        Overall_Rating__c,
+        Fiscal_year__c
+      FROM Academic_Performance__c
+      WHERE Charter_Organization__c = :organizationId
+      ORDER BY Fiscal_year__c DESC
+    ];
+    return academicPerformances;
+  }
+
+  // Function to find academic performance for all schools related to current organization  (lwc --> academicDashboardSchoolWise)
+  @AuraEnabled(cacheable=true)
+  public static Map<String, List<Academic_Performance__c>> findAcademicPerformanceDetailsSchoolWise(
+    String organizationId
+  ) {
+    List<School__c> schools = [
+      SELECT Name
+      FROM School__c
+      WHERE Account__c = :organizationId
+    ];
+    List<Academic_Performance__c> academicPerformances = new List<Academic_Performance__c>();
+    Map<String, List<Academic_Performance__c>> returnMap = new Map<String, List<Academic_Performance__c>>();
+    for (School__c school : schools) {
+      academicPerformances = [
+        SELECT
+          Id,
+          School__r.Name,
+          Fiscal_year__c,
+          Grading_Type__c,
+          School_Type__c,
+          Grades_Served__c,
+          Letter_Grade__c,
+          Improvement_Designation__c,
+          State_Designations_Rating__c,
+          Overall_Rating__c,
+          Letter_Grade_Rating__c,
+          Comment_Made_By_Charter_Rep__c
+        FROM Academic_Performance__c
+        WHERE School__r.Id = :school.Id
+        ORDER BY Fiscal_year__c DESC
+        LIMIT 3
+      ];
+      returnMap.put(school.Name, academicPerformances);
+    }
+    return returnMap;
+  }
+
+  // Function to update academic performances for given school Id based on JSON ( lwc -->academicDashboard)
+  @AuraEnabled
+  public static void updateAcademicPerformance(String schoolId, String data) {
+    List<Object> academicDataObjects = (List<Object>) JSON.deserializeUntyped(
+      data
+    );
+    List<String> yearlist = new List<String>();
+    for (Object obj : academicDataObjects) {
+      Map<String, Object> mapObj = (Map<String, Object>) Json.deserializeUntyped(
+        Json.serialize(obj)
+      );
+      yearlist.add((String) mapObj.get('year'));
+    }
+    List<Academic_Performance__c> academicPerformances = [
+      SELECT
+        School__r.Name,
+        Letter_Grade__c,
+        Fiscal_year__c,
+        Improvement_Designation__c
+      FROM Academic_Performance__c
+      WHERE Fiscal_year__c IN :yearlist AND School__r.Id = :schoolId
+    ];
+
+    for (Academic_Performance__c academic : academicPerformances) {
+      for (Object obj : academicDataObjects) {
+        Map<String, Object> mapObj = (Map<String, Object>) Json.deserializeUntyped(
+          Json.serialize(obj)
+        );
+
+        String yearFromInput = (String) mapObj.get('year');
+        if (academic.Fiscal_year__c == yearFromInput) {
+          if (mapObj.containsKey('letterGrade'))
+            academic.Letter_Grade__c = (String) mapObj.get('letterGrade');
+          if (mapObj.containsKey('schoolImprovement'))
+            academic.Improvement_Designation__c = (String) mapObj.get(
+              'schoolImprovement'
+            );
+        }
+      }
+    }
+    update academicPerformances;
+  }
+}

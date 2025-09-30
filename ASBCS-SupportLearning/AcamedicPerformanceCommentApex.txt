@@ -1,0 +1,13 @@
+public without sharing class AcademicPerformanceComment {
+    @AuraEnabled
+    public static void updateAcademicPerformanceCRComment(String academicPerfId, String year, String comment) {
+        // Logic to find the relevant record based on the year and update the comment
+        Academic_Performance__c AcademicRecords = [SELECT Id, Comment_Made_By_Charter_Rep__c FROM Academic_Performance__c WHERE Id =: academicPerfId AND Fiscal_year__c = :year LIMIT 1];
+        if (AcademicRecords !=null) {
+          AcademicRecords.Comment_Made_By_Charter_Rep__c = comment;
+          update AcademicRecords;
+        } else{
+          throw new AuraHandledException('Academic record not found.');
+        }
+    }
+}
